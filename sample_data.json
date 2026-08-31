@@ -1,0 +1,88 @@
+{
+  "report_type": "weekly",
+  "report_period": "2026年第35周",
+  "department": "数字化推进部",
+  "author": "张三",
+  "date": "2026-08-31",
+  "logo_text": "MES",
+
+  "overview_summary": "本周重点推进MES系统数据对接项目，已完成3条产线的数据采集接口开发，数据延迟控制在5秒以内。产品良率较上周提升2.3%，达到97.3%的历史新高。",
+
+  "overview_table": [
+    {"seq": 1, "project": "MES系统数据对接", "content": "PLC数据采集接口开发", "weekly_progress": "完成3条产线对接，延迟<5s", "owner": "张三", "start": "2026-08-01", "end": "2026-09-15", "progress": 100, "status": "已完成", "remark": ""},
+    {"seq": 2, "project": "质量追溯看板设计", "content": "UI原型设计+数据库设计", "weekly_progress": "完成原型和表结构设计", "owner": "李四", "start": "2026-08-10", "end": "2026-09-10", "progress": 65, "status": "进行中", "remark": "下周三评审"},
+    {"seq": 3, "project": "设备联网改造", "content": "关键设备联网改造", "weekly_progress": "完成2台改造，剩余3台", "owner": "王五", "start": "2026-08-15", "end": "2026-09-20", "progress": 40, "status": "进行中", "remark": "需采购网关"},
+    {"seq": 4, "project": "操作员数字化培训", "content": "系统操作培训", "weekly_progress": "完成培训计划制定", "owner": "赵六", "start": "2026-09-01", "end": "2026-09-25", "progress": 0, "status": "计划中", "remark": "待协调会议室"},
+    {"seq": 5, "project": "数据采集标准制定", "content": "编写SOP文档", "weekly_progress": "完成初稿编写", "owner": "张三", "start": "2026-08-20", "end": "2026-09-05", "progress": 80, "status": "进行中", "remark": ""}
+  ],
+
+  "overview_gantt": {
+    "start_date": "2026-08-01",
+    "end_date": "2026-09-30",
+    "tasks": [
+      {"name": "MES系统对接", "start": "2026-08-01", "end": "2026-09-15", "color": "#3A7BD5"},
+      {"name": "看板设计", "start": "2026-08-10", "end": "2026-09-10", "color": "#27AE60"},
+      {"name": "设备联网改造", "start": "2026-08-15", "end": "2026-09-20", "color": "#E86C00"},
+      {"name": "操作员培训", "start": "2026-09-01", "end": "2026-09-25", "color": "#F39C12"},
+      {"name": "数据采集SOP", "start": "2026-08-20", "end": "2026-09-05", "color": "#3A7BD5"}
+    ]
+  },
+
+  "kpi_summary": "本周6项核心KPI中，4项达标，2项未达标。产量达成率和产品良率持续向好，异常响应时间需重点关注。",
+  "kpi_left_title": "指标达成分析",
+  "kpi_left_desc": "产量达成率98.5%，连续3周保持在95%以上的目标水平，主要得益于MES系统上线后排产效率提升。产品良率97.3%，创历史新高，较上周提升2.3个百分点，新工艺调试效果显著。设备OEE 85.2%，与目标持平。异常响应时间12min，较目标值差2min，主要原因是夜班人员不足。",
+  "kpi_chart": {
+    "type": "line",
+    "title": "近8周良率趋势",
+    "categories": ["W28", "W29", "W30", "W31", "W32", "W33", "W34", "W35"],
+    "series": [
+      {"name": "目标良率", "values": [95, 95, 95, 95, 95, 95, 95, 95]},
+      {"name": "实际良率", "values": [91.2, 92.5, 93.1, 94.0, 94.8, 95.2, 96.1, 97.3]}
+    ]
+  },
+  "kpi_right_modules": [
+    {"name": "产量达成率", "value": "98.5%", "target": "≥95%", "trend": "up", "good": true, "path": "MES排产优化 → 设备利用率提升 → 换型时间缩短15%"},
+    {"name": "产品良率", "value": "97.3%", "target": "≥96%", "trend": "up", "good": true, "path": "新工艺参数调试 → 过程控制加强 → 不良品率下降"},
+    {"name": "设备OEE", "value": "85.2%", "target": "≥85%", "trend": "flat", "good": true, "path": "TPM推进 → 计划性维护 → 故障停机减少"},
+    {"name": "异常响应时间", "value": "12min", "target": "≤10min", "trend": "down", "good": false, "path": "夜班值班制度优化 → 响应流程标准化 → 目标10min"}
+  ],
+  "kpi_right_path_title": "达标路径与逻辑",
+
+  "key_works_summary": "本周共推进4项重点工作，其中1项已完成，2项进行中，1项计划中。",
+  "key_works_table": [
+    {"seq": 1, "project": "MES系统数据接口开发", "content": "PLC数据采集接口开发", "weekly_progress": "完成3条产线PLC数据对接，单点延迟<5s", "owner": "张三", "start": "2026-08-01", "end": "2026-09-15", "progress": 100, "status": "已完成", "remark": "验收通过"},
+    {"seq": 2, "project": "质量追溯看板设计", "content": "UI原型设计+数据库表结构设计", "weekly_progress": "完成UI原型和数据库表结构设计", "owner": "李四", "start": "2026-08-10", "end": "2026-09-10", "progress": 65, "status": "进行中", "remark": "下周三内部评审"},
+    {"seq": 3, "project": "设备联网改造", "content": "5台关键设备联网改造", "weekly_progress": "完成2台改造，剩余3台", "owner": "王五", "start": "2026-08-15", "end": "2026-09-20", "progress": 40, "status": "进行中", "remark": "需采购协议转换网关"},
+    {"seq": 4, "project": "操作员数字化培训", "content": "系统操作培训计划", "weekly_progress": "完成培训计划制定和材料准备", "owner": "赵六", "start": "2026-09-01", "end": "2026-09-25", "progress": 0, "status": "计划中", "remark": "待协调会议室和设备"}
+  ],
+
+  "problems_summary": "本周存在2个突出问题需要重点关注和解决。",
+  "problems_table": [
+    {"issue": "部分老旧设备不支持标准通讯协议", "impact": "影响数据采集覆盖率达到80%的目标", "solution": "采购协议转换网关，预计成本2万元，走采购流程", "deadline": "2026-09-15", "owner": "王五", "status": "进行中"},
+    {"issue": "操作员对新系统接受度不高", "impact": "影响系统实际使用效果和数据质量", "solution": "增加一对一辅导和激励措施，纳入绩效考核", "deadline": "2026-09-10", "owner": "赵六", "status": "进行中"},
+    {"issue": "数据采集偶尔断连", "impact": "影响实时看板数据刷新", "solution": "增加断线重连机制和告警通知", "deadline": "2026-09-07", "owner": "张三", "status": "已完成"}
+  ],
+
+  "next_plan_summary": "下周计划推进6项工作，重点项目为产线对接收尾和看板上线。",
+  "next_plan_table": [
+    {"seq": 1, "project": "完成剩余产线数据对接", "content": "PLC数据采集安装调试", "next_plan": "完成2条产线PLC数据采集安装和调试", "owner": "张三", "start": "2026-09-01", "end": "2026-09-07", "progress": 0, "status": "计划中", "remark": ""},
+    {"seq": 2, "project": "质量追溯看板上线", "content": "看板部署和测试", "next_plan": "完成看板部署、数据验证和测试", "owner": "李四", "start": "2026-09-01", "end": "2026-09-10", "progress": 0, "status": "计划中", "remark": "需IT配合"},
+    {"seq": 3, "project": "设备联网剩余改造", "content": "3台设备联网改造", "next_plan": "完成剩余3台设备联网改造施工", "owner": "王五", "start": "2026-09-03", "end": "2026-09-12", "progress": 0, "status": "计划中", "remark": "待网关到货"},
+    {"seq": 4, "project": "第一轮操作培训", "content": "系统操作培训实施", "next_plan": "组织第一轮系统操作培训，覆盖30人", "owner": "赵六", "start": "2026-09-05", "end": "2026-09-08", "progress": 0, "status": "计划中", "remark": "培训室已预约"},
+    {"seq": 5, "project": "数据采集SOP定稿", "content": "SOP文档评审发布", "next_plan": "完成SOP文档评审和正式发布", "owner": "张三", "start": "2026-09-01", "end": "2026-09-05", "progress": 80, "status": "进行中", "remark": "周五前完成"},
+    {"seq": 6, "project": "能耗监控需求调研", "content": "能耗模块需求调研", "next_plan": "完成需求调研和初步方案设计", "owner": "李四", "start": "2026-09-08", "end": "2026-09-20", "progress": 0, "status": "计划中", "remark": ""}
+  ],
+
+  "next_plan_gantt": {
+    "start_date": "2026-09-01",
+    "end_date": "2026-09-30",
+    "tasks": [
+      {"name": "产线数据对接", "start": "2026-09-01", "end": "2026-09-07", "color": "#3A7BD5"},
+      {"name": "看板上线", "start": "2026-09-01", "end": "2026-09-10", "color": "#27AE60"},
+      {"name": "设备联网改造", "start": "2026-09-03", "end": "2026-09-12", "color": "#E86C00"},
+      {"name": "操作培训", "start": "2026-09-05", "end": "2026-09-08", "color": "#F39C12"},
+      {"name": "SOP定稿", "start": "2026-09-01", "end": "2026-09-05", "color": "#3A7BD5"},
+      {"name": "能耗调研", "start": "2026-09-08", "end": "2026-09-20", "color": "#8E44AD"}
+    ]
+  }
+}
