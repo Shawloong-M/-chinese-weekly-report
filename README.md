@@ -38,29 +38,29 @@ python scripts/chinese_weekly_report.py your_data.json output.pptx
 
 参考 `sample_data.json`，核心字段说明：
 
-| 字段 | 说明 | 必填 |
-|------|------|------|
-| `report_period` | 报告周期（如"2026年第35周"） | 是 |
-| `department` | 部门名称 | 是 |
-| `overview_table` | 任务进度表（5-6行） | 是 |
-| `overview_gantt` | 甘特图任务列表 | 是 |
-| `kpi_right_modules` | KPI 指标卡（最多4个） | 推荐 |
-| `kpi_chart` | 趋势图配置 | 推荐 |
-| `key_works_table` | 重点工作表 | 是 |
-| `problems_table` | 问题对策表 | 推荐 |
-| `next_plan_table` | 下周计划表 | 是 |
-| `next_plan_gantt` | 下周甘特图 | 推荐 |
+| 字段                | 说明                         | 必填 |
+| ------------------- | ---------------------------- | ---- |
+| `report_period`     | 报告周期（如"2026年第35周"） | 是   |
+| `department`        | 部门名称                     | 是   |
+| `overview_table`    | 任务进度表（5-6行）          | 是   |
+| `overview_gantt`    | 甘特图任务列表               | 是   |
+| `kpi_right_modules` | KPI 指标卡（最多4个）        | 推荐 |
+| `kpi_chart`         | 趋势图配置                   | 推荐 |
+| `key_works_table`   | 重点工作表                   | 是   |
+| `problems_table`    | 问题对策表                   | 推荐 |
+| `next_plan_table`   | 下周计划表                   | 是   |
+| `next_plan_gantt`   | 下周甘特图                   | 推荐 |
 
 ## 输出结构
 
-| 页码 | 内容 | 说明 |
-|------|------|------|
-| 1 | 封面 | 标题 + LOGO + 部门/报告人/日期 |
-| 2 | 目录 | 四章导航 |
-| 3 | 本周概述 | 总结 + 10列任务表 + 甘特图 |
-| 4 | 核心KPI | 55/45 分栏：左侧描述+图表，右侧指标+路径 |
-| 5 | 重点工作与问题对策 | 合并页，各带总结 |
-| 6 | 下周计划 | 计划表 + 甘特图 |
+| 页码 | 内容               | 说明                                     |
+| ---- | ------------------ | ---------------------------------------- |
+| 1    | 封面               | 标题 + LOGO + 部门/报告人/日期           |
+| 2    | 目录               | 四章导航                                 |
+| 3    | 本周概述           | 总结 + 10列任务表 + 甘特图               |
+| 4    | 核心KPI            | 55/45 分栏：左侧描述+图表，右侧指标+路径 |
+| 5    | 重点工作与问题对策 | 合并页，各带总结                         |
+| 6    | 下周计划           | 计划表 + 甘特图                          |
 
 ## 截图
 
@@ -78,6 +78,12 @@ python scripts/chinese_weekly_report.py your_data.json output.pptx
 - 数字化部门工作报告
 - 生产运营 KPI 汇报
 - 项目进度汇报
+
+## 支持
+
+如果这个项目帮到了你，欢迎请我喝杯咖啡 ☕
+
+[https://afdian.com/a/Shawloong](https://afdian.com/a/Shawloong)
 
 ## 许可证
 
