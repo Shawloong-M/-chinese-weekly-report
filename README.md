@@ -11,13 +11,19 @@
 - 🏭 **工厂风格封面**：深蓝底色 + 建筑装饰 + LOGO 占位
 - 🔄 **双输出**：PPTX（可编辑）+ HTML（直接预览）
 - 💰 **数据驱动**：所有内容来自 JSON 配置文件，改数据不改模板
+- 📁 **Excel 直接导入**：支持从 .xlsx/.xls 文件直接读取数据，无需手写 JSON
+- 🎨 **自定义模板支持**：支持传入自定义 PPT 模板，保留企业 VI 风格
 
 ## 快速开始
 
 ### 1. 安装依赖
 
 ```bash
+# 基础依赖（JSON输入模式）
 pip install python-pptx
+
+# 完整依赖（支持Excel导入）
+pip install python-pptx pandas openpyxl
 ```
 
 ### 2. 准备数据
@@ -27,7 +33,14 @@ pip install python-pptx
 ### 3. 生成 PPTX
 
 ```bash
+# 基础用法（JSON输入）
 python scripts/chinese_weekly_report.py your_data.json output.pptx
+
+# Excel输入用法
+python scripts/chinese_weekly_report.py your_data.xlsx output.pptx
+
+# 自定义模板用法
+python scripts/chinese_weekly_report.py your_data.json output.pptx your_template.pptx
 ```
 
 ### 4. 打开查看
