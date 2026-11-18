@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Chinese Weekly/Monthly Report Generator v2.2"""
+"""Chinese Weekly/Monthly Report Generator v2.4"""
 import json, sys, os
 from pathlib import Path
 from datetime import datetime, timedelta
@@ -132,16 +132,61 @@ def summary_bar(slide, top, text):
     rect(slide, ML, top, CW, SHH, C["light_bg"], "", bc=C["border"], bw=0.5)
     tb(slide, ML + 0.1, top + 0.03, CW - 0.2, SHH - 0.06, text, FONT["summary"], color=C["dark"])
 
+# ── Text metrics: estimate wrapped lines so row heights are deterministic ──
+# python-pptx row heights are only a minimum: if cell text wraps beyond the
+# allotted height, PowerPoint/LibreOffice stretch the row and every section
+# placed below it by a fixed offset overlaps the table. So measure first.
+def _char_w_in(ch, font_pt):
+    o = ord(ch)
+    if ch == " ":
+        return font_pt * 0.30 / 72
+    if o < 128:
+        return font_pt * 0.55 / 72
+    if 0x4E00 <= o <= 0x9FFF or 0x3000 <= o <= 0x30FF or 0xFF00 <= o <= 0xFFEF:
+        return font_pt * 1.0 / 72
+    return font_pt * 0.8 / 72
+
+def _wrap_lines(text, col_w_in, font_pt):
+    """Lines `text` wraps to in a column `col_w_in` inches wide.
+    Greedy per-character wrap: total-width division undercounts narrow
+    columns, where each line only fits 2 CJK chars and the leftover
+    space is wasted."""
+    usable = max(0.15, col_w_in - 0.20)  # cell left/right margins
+    lines = 0
+    for para in str(text).split("\n"):
+        cur = 0.0
+        nlines = 1
+        for ch in para:
+            w = _char_w_in(ch, font_pt) * 1.15  # font-substitution safety
+            if cur > 0 and cur + w > usable:
+                nlines += 1
+                cur = w
+            else:
+                cur += w
+        lines += nlines
+    return max(1, lines)
+
+def _row_h_in(lines, font_pt):
+    return lines * font_pt * 1.3 / 72 + 0.12  # line height + cell top/bottom margins
+
 # ── Table (B: improved header color, larger fonts, light_bg alt rows) ──
-def add_table(slide, l, t, w, h, headers, rows, cw=None):
+def add_table(slide, l, t, w, headers, rows, cw=None):
+    """Build a table with per-row heights computed from content.
+    Returns the table's true total height in inches, so the next
+    section can be placed below its real bottom instead of guessing."""
     nr = len(rows) + 1
     nc = len(headers)
-    ts = slide.shapes.add_table(nr, nc, Inches(l), Inches(t), Inches(w), Inches(h))
+    ts = slide.shapes.add_table(nr, nc, Inches(l), Inches(t), Inches(w), Inches(0.1))
     tbl = ts.table
     if cw:
         for i, c in enumerate(cw):
             if i < len(tbl.columns):
                 tbl.columns[i].width = Inches(c)
+    widths = [(cw[i] if cw and i < len(cw) else w / nc) for i in range(nc)]
+    total = 0.0
+    hh = _row_h_in(max(_wrap_lines(hd, widths[ci], FONT["th"]) for ci, hd in enumerate(headers)), FONT["th"])
+    tbl.rows[0].height = Inches(hh)
+    total += hh
     for ci, hd in enumerate(headers):
         c = tbl.cell(0, ci)
         c.text = hd
@@ -154,6 +199,9 @@ def add_table(slide, l, t, w, h, headers, rows, cw=None):
             p.font.name = "等线"
             p.alignment = PP_ALIGN.CENTER
     for ri, row in enumerate(rows):
+        rh = _row_h_in(max(_wrap_lines(val, widths[ci], FONT["td"]) for ci, val in enumerate(row)), FONT["td"])
+        tbl.rows[ri + 1].height = Inches(rh)
+        total += rh
         for ci, val in enumerate(row):
             c = tbl.cell(ri + 1, ci)
             c.text = str(val) if val is not None else ""
@@ -164,6 +212,7 @@ def add_table(slide, l, t, w, h, headers, rows, cw=None):
                 p.font.color.rgb = C["dark"]
                 p.font.name = "等线"
                 p.alignment = PP_ALIGN.CENTER
+    return total
 
 # ── Gantt (D: larger name area, thicker bars, grid background) ──
 def gantt(slide, l, t, w, h, gd):
@@ -272,14 +321,14 @@ def s_overview(prs, d):
     summary_bar(sl, ST, d.get("overview_summary",""))
     td = d.get("overview_table",[])
     tt = ST + SHH + 0.1
+    th = 0.0
     if td:
         hd = ["序号","项目名称","项目内容","本周进度","责任人","开始时间","结束时间","进度","状态","备注"]
         rows = [[t.get("seq",""),t.get("project",""),t.get("content",""),t.get("weekly_progress",""),t.get("owner",""),t.get("start",""),t.get("end",""),f"{t.get('progress',0)}%",t.get("status",""),t.get("remark","")] for t in td[:6]]
-        th = min(0.32*len(rows)+0.35, 2.8)
-        add_table(sl, ML, tt, CW, th, hd, rows, [0.35,1.2,1.8,1.8,0.6,0.7,0.7,0.5,0.6,0.5])
+        th = add_table(sl, ML, tt, CW, hd, rows, [0.35,1.2,1.8,1.8,0.6,0.7,0.7,0.5,0.6,0.5])
     g = d.get("overview_gantt",{})
-    gt = tt + (min(0.32*len(td)+0.35,2.8) if td else 0.3) + 0.15
-    gh = H - gt - 0.35
+    gt = tt + (th if td else 0.3) + 0.15
+    gh = max(0.8, H - gt - 0.35)
     if g.get("tasks"): gantt(sl, ML, gt, CW, gh, g)
 
 # ── KPI (C: 55/45 left-right split) ──
@@ -328,11 +377,11 @@ def s_wp(prs, d):
     summary_bar(sl, ST, d.get("key_works_summary",""))
     kw = d.get("key_works_table",[])
     kt = ST + SHH + 0.08
+    th = 0.0
     if kw:
         hd = ["序号","项目名称","项目内容","本周进度","责任人","开始时间","结束时间","进度","状态","备注"]
         rows = [[t.get("seq",""),t.get("project",""),t.get("content",""),t.get("weekly_progress",""),t.get("owner",""),t.get("start",""),t.get("end",""),f"{t.get('progress',0)}%",t.get("status",""),t.get("remark","")] for t in kw[:4]]
-        th = 0.32*len(rows)+0.35
-        add_table(sl, ML, kt, CW, th, hd, rows, [0.35,1.2,1.8,1.8,0.6,0.7,0.7,0.5,0.6,0.5])
+        th = add_table(sl, ML, kt, CW, hd, rows, [0.35,1.2,1.8,1.8,0.6,0.7,0.7,0.5,0.6,0.5])
     py = kt + th + 0.08 if kw else ST + SHH + 0.08
     summary_bar(sl, py, f"问题对策: {d.get('problems_summary','')}")
     pt = d.get("problems_table",[])
@@ -340,8 +389,7 @@ def s_wp(prs, d):
     if pt:
         hd = ["问题描述","影响","解决方案","完成时限","责任人","状态"]
         rows = [[p.get("issue",""),p.get("impact",""),p.get("solution",""),p.get("deadline","—"),p.get("owner",""),p.get("status","")] for p in pt[:3]]
-        pth = 0.32*len(rows)+0.35
-        add_table(sl, ML, ppt, CW, pth, hd, rows, [2.2,2.0,3.5,1.2,0.8,0.8])
+        add_table(sl, ML, ppt, CW, hd, rows, [2.2,2.0,3.5,1.2,0.8,0.8])
 
 def s_plan(prs, d):
     sl = prs.slides.add_slide(prs.slide_layouts[6])
@@ -349,14 +397,14 @@ def s_plan(prs, d):
     summary_bar(sl, ST, d.get("next_plan_summary",""))
     pt = d.get("next_plan_table",[])
     tt = ST + SHH + 0.1
+    th = 0.0
     if pt:
         hd = ["序号","项目名称","项目内容","下周计划","责任人","开始时间","结束时间","进度","状态","备注"]
         rows = [[t.get("seq",""),t.get("project",""),t.get("content",""),t.get("next_plan",""),t.get("owner",""),t.get("start",""),t.get("end",""),f"{t.get('progress',0)}%",t.get("status",""),t.get("remark","")] for t in pt[:6]]
-        th = min(0.32*len(rows)+0.35, 2.5)
-        add_table(sl, ML, tt, CW, th, hd, rows, [0.35,1.2,1.8,1.8,0.6,0.7,0.7,0.5,0.6,0.5])
+        th = add_table(sl, ML, tt, CW, hd, rows, [0.35,1.2,1.8,1.8,0.6,0.7,0.7,0.5,0.6,0.5])
     g = d.get("next_plan_gantt",{})
-    gt = tt + (min(0.32*len(pt)+0.35,2.5) if pt else 0.3) + 0.15
-    gh = H - gt - 0.35
+    gt = tt + (th if pt else 0.3) + 0.15
+    gh = max(0.8, H - gt - 0.35)
     if g.get("tasks"): gantt(sl, ML, gt, CW, gh, g)
 
 # ══════════════════════════════════════════════════════════════════════════

@@ -1,7 +1,7 @@
 ---
 name: chinese-weekly-report
 description: Generate Chinese weekly/monthly reports with KPI cards.
-version: 2.2.0
+version: 2.4.0
 author: mxl_t (mxl_t), Hermes Agent
 license: MIT
 platforms: [windows, macos, linux]
